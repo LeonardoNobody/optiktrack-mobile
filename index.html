@@ -1,34 +1,112 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>OptikTrack Mobile | Leitor ZEISS</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>OptikTrack Mobile | Conferência dupla ZEISS</title>
 <style>
-:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#071c32;color:#f3f8ff;font:16px system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:520px;margin:auto;padding:24px 18px 40px}header{display:flex;align-items:center;gap:12px;margin-bottom:26px}.logo{background:#dffaff;color:#09223d;border-radius:13px;padding:12px;font-weight:900}.sub{font-size:12px;color:#adc4d8}h1{font-size:24px;margin:0}.panel{background:#102e4d;border:1px solid #294966;border-radius:16px;padding:16px;margin-bottom:16px}video{width:100%;aspect-ratio:4/3;background:#061523;object-fit:cover;border-radius:12px}button{border:0;padding:14px 16px;background:#26b6c9;color:#041d32;font-size:15px;font-weight:750;border-radius:11px;cursor:pointer}button.secondary{background:#294967;color:#fff}button:disabled{opacity:.5;cursor:not-allowed}.actions{display:flex;gap:10px;margin:12px 0}.actions>*{flex:1}label{display:block;font-size:13px;color:#b9d0e2;margin:9px 0}input{width:100%;border:1px solid #52728e;background:#081f36;color:#fff;border-radius:9px;padding:13px;font-size:18px;letter-spacing:1px}#status{font-size:13px;color:#bcd6e8;margin:10px 0}strong.code{font-size:29px;letter-spacing:1px;overflow-wrap:anywhere}.ok{color:#71e7bc}.danger{color:#ffb3b3}.muted{color:#afc2d7;font-size:13px}small{font-size:12px;color:#aec4d8}</style>
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#071c32;color:#f3f8ff;font:16px system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{max-width:620px;margin:auto;padding:22px 16px 50px}header{display:flex;align-items:center;gap:12px;margin-bottom:20px}.logo{background:#e1f8fc;color:#0b2340;border-radius:13px;padding:12px;font-weight:900}h1{font-size:23px;margin:0}.sub,.hint,.foot{color:#b5cddd;font-size:13px;line-height:1.55}.panel{background:#102e4d;border:1px solid #2c506d;border-radius:16px;padding:18px;margin:0 0 15px}h2{font-size:18px;margin:0 0 12px}label{display:block;color:#c1d5e6;font-size:13px;margin:12px 0 5px}input,textarea{width:100%;border:1px solid #60809b;background:#081e34;color:#fff;border-radius:10px;padding:12px;font:16px system-ui;outline-offset:2px}input[type=file]{font-size:13px}textarea{min-height:90px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid>*{min-width:0}.actions{display:flex;gap:10px;margin-top:12px}.actions>*{flex:1}button{border:0;padding:13px 12px;background:#2bb8c9;color:#082136;font:700 14px system-ui;border-radius:10px;cursor:pointer}button.secondary{background:#31536e;color:#fff}button:disabled{opacity:.45;cursor:not-allowed}.notice{padding:12px;background:#1d485a;border-radius:10px;font-size:13px}.ok{color:#76ecc3!important}.warn{color:#ffd28a!important}.danger{color:#ffb1ae!important}.status{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;color:#c4d5e5;margin:12px 0}.facts{display:grid;grid-template-columns:1fr 1fr;gap:9px}.fact{background:#071e35;padding:12px;border-radius:10px;min-width:0}.fact small{display:block;color:#b5c9d9}.fact strong{overflow-wrap:anywhere}.badge{font-size:12px;color:#76ecc3;font-weight:750}.hidden{display:none!important}#photoPreview{width:100%;max-height:350px;object-fit:contain;border-radius:10px;margin-top:12px;background:#081a2d}.foot{font-size:12px}details summary{cursor:pointer}.separator{height:1px;background:#365575;margin:15px 0}code{overflow-wrap:anywhere}.result-title{font-weight:800;margin-bottom:12px}@media(max-width:360px){.grid{grid-template-columns:1fr}}
+</style>
 </head>
 <body><main class="wrap">
-<header><span class="logo">◉</span><div><h1>OptikTrack Mobile</h1><div class="sub">Recebimento ZEISS • teste do leitor</div></div></header>
-<section class="panel"><h2 style="font-size:18px;margin:0 0 14px">1. Escanear romaneio</h2>
-<video id="preview" muted playsinline autoplay></video>
-<div class="actions"><button id="start">Ativar câmera</button><button id="stop" class="secondary" disabled>Parar câmera</button></div>
-<div id="status" role="status" aria-live="polite">Pronto para iniciar. A primeira leitura exige permissão da câmera.</div>
+<header><span class="logo">◉</span><div><h1>OptikTrack Mobile</h1><div class="sub">Conferência dupla ZEISS · v0.3</div></div></header>
+<section class="panel">
+<h2>1. Fotografar romaneio</h2>
+<p class="notice">Somente leitura. A foto é analisada no aparelho; nenhum recebimento será registrado nesta versão.</p>
+<label for="photo">Fotografar ou selecionar imagem do romaneio</label>
+<input id="photo" type="file" accept="image/*" capture="environment">
+<img id="photoPreview" class="hidden" alt="Foto selecionada do romaneio">
+<div class="actions"><button id="rotate" class="secondary" disabled>Girar 90°</button><button id="recognize" disabled>Reconhecer texto</button></div>
+<div id="ocrStatus" class="status" aria-live="polite">Dica: aproxime a câmera da área com OSC e OS, mantenha o papel reto e bem iluminado.</div>
+<details><summary class="hint">Ver texto reconhecido (diagnóstico)</summary><textarea id="ocrText" readonly placeholder="O texto reconhecido aparecerá aqui."></textarea></details>
 </section>
-<section class="panel"><h2 style="font-size:18px;margin:0 0 14px">2. Conferir código</h2>
-<label for="raw">Código lido ou digitado</label><input id="raw" inputmode="numeric" autocomplete="off" placeholder="Ex.: 0004600573" />
-<p class="muted">Número de pedido ZEISS normalizado</p><strong class="code" id="normalized">—</strong>
-<p class="muted" id="hint">Nenhum código informado.</p>
+<section class="panel">
+<h2>2. Conferir identificadores</h2>
+<p class="hint">Confira os números com o romaneio físico. O texto pode ser lido incorretamente pela câmera.</p>
+<label for="pedido">OSC — número do pedido ZEISS</label>
+<input id="pedido" inputmode="numeric" autocomplete="off" placeholder="Ex.: 4593329">
+<div class="grid">
+<div><label for="loja">Loja Shop9</label><input id="loja" inputmode="numeric" autocomplete="off" placeholder="1988"></div>
+<div><label for="os">OS Shop9</label><input id="os" inputmode="text" autocomplete="off" autocapitalize="characters" placeholder="8770"></div>
+</div>
+<div class="status" id="formStatus" aria-live="polite">Preencha o pedido ZEISS, a loja e a OS.</div>
 </section>
-<section class="panel"><p class="ok" style="margin-top:0;font-weight:700">Modo seguro: somente leitura local</p><small>Este protótipo ainda não se conecta ao Google Sheets, não envia códigos a um servidor da empresa e não altera datas de recebimento. A biblioteca de scanner é carregada de CDN; para uso produtivo, vamos fixar e auditar os arquivos de dependência.</small></section>
+<section class="panel">
+<h2>3. Autorizar consulta à planilha</h2>
+<p class="hint">Acesso via Google OAuth com permissão de leitura; use inicialmente uma cópia da planilha com uma conta de teste. As credenciais não ficam salvas.</p>
+<label for="clientId">ID de cliente OAuth (Google Cloud)</label><input id="clientId" autocomplete="off" spellcheck="false" autocapitalize="off" placeholder="...apps.googleusercontent.com">
+<label for="sheetId">URL ou ID da planilha Google Sheets</label><input id="sheetId" autocomplete="off" spellcheck="false" autocapitalize="off" placeholder="https://docs.google.com/spreadsheets/d/…">
+<div class="actions"><button id="connect">Autorizar Google</button><button id="disconnect" class="secondary" disabled>Desconectar</button></div>
+<div class="status" id="authStatus" aria-live="polite">Ainda não autorizado.</div>
+</section>
+<section class="panel">
+<h2>4. Validar pedido + OS</h2>
+<p class="hint">A consulta exige correspondência simultânea de <strong>NUM. PED.</strong> e <strong>OS</strong> na mesma linha. A loja deverá ser verificada pela associação da planilha à filial; a configuração de demonstração abaixo não comprova essa associação sozinha.</p>
+<label for="expectedStore">Loja vinculada à planilha de teste (conferência manual)</label><input id="expectedStore" inputmode="numeric" placeholder="Ex.: 1988" value="1988">
+<button id="search" style="width:100%;margin-top:12px" disabled>Conferir na planilha</button>
+<div class="status" id="searchStatus" aria-live="polite"></div>
+<div id="result" class="hidden" aria-live="polite"></div>
+</section>
+<section class="panel"><details><summary>Segurança e limitações</summary><p class="foot">Esta versão não altera planilhas. O escopo Google <code>spreadsheets.readonly</code> permite ler planilhas acessíveis à conta autorizada, não apenas a planilha indicada. Os tokens ficam somente em memória. A extração OCR é realizada no navegador, mas a biblioteca e os modelos do Tesseract são carregados de CDN; revise essa dependência antes de uso comercial.</p><p class="foot">O campo de loja informado por alguém no celular não é prova de autorização. Para permitir gravações no futuro, precisaremos validar a loja e a identidade no servidor, além de conferir novamente pedido/OS, duplicidade, data recebida e registrar auditoria.</p><p class="foot">O OCR pode errar ou falhar. Confirmação visual dos dois campos é obrigatória. Dados pessoais do romaneio não devem ser publicados em repositório público.</p></details></section>
 </main>
-<script src="https://unpkg.com/@zxing/browser@0.1.5/umd/zxing-browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@6.0.1/dist/tesseract.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 'use strict';
-const el=id=>document.getElementById(id), raw=el('raw'), status=el('status');
-let controls=null, reader=null, last='';
-function display(text){const digits=String(text||'').replace(/\D/g,'');const norm=digits.replace(/^0+/,'');el('normalized').textContent=norm||'—';el('hint').textContent=digits?'Código original: '+digits:'Nenhum código informado.';return digits;}
-raw.addEventListener('input',()=>display(raw.value));
-function stop(){if(controls){controls.stop();controls=null;}const v=el('preview');if(v.srcObject){for(const t of v.srcObject.getTracks())t.stop();v.srcObject=null;}el('start').disabled=false;el('stop').disabled=true;}
-el('stop').addEventListener('click',()=>{stop();status.textContent='Câmera desligada.'});
-el('start').addEventListener('click',async()=>{if(!window.isSecureContext){status.textContent='A câmera exige uma página HTTPS.';return;}if(!window.ZXingBrowser){status.textContent='Não foi possível carregar a biblioteca ZXing. Confira sua conexão.';return;}el('start').disabled=true;status.textContent='Solicitando permissão da câmera…';try{reader=new ZXingBrowser.BrowserMultiFormatReader();controls=await reader.decodeFromConstraints({audio:false,video:{facingMode:{ideal:'environment'}}},el('preview'),(result,error,ctrl)=>{if(!result)return;const code=String(result.getText()).trim();if(code===last)return;last=code;raw.value=code;display(code);status.textContent='Leitura concluída: '+code;status.className='ok';if(navigator.vibrate)navigator.vibrate(100);stop();});el('stop').disabled=false;status.textContent='Aponte para o código de barras do romaneio.';}catch(err){stop();status.className='danger';status.textContent='Falha ao abrir câmera: '+(err?.message||String(err))+'. Confira as permissões do navegador.';}});
-display('');
-</script></body></html>
+const $=id=>document.getElementById(id);
+const MONTH_RE=/^(JANEIRO|FEVEREIRO|MARÇO|ABRIL|MAIO|JUNHO|JULHO|AGOSTO|SETEMBRO|OUTUBRO|NOVEMBRO|DEZEMBRO)\s+20\d\d$/i;
+const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toUpperCase();
+const numeric=s=>{const v=String(s??'').trim().replace(/[.\s]/g,'');return /^\d+$/.test(v)?v.replace(/^0+(?=\d)/,''):''};
+const normalizedOS=s=>{const v=String(s??'').trim().toUpperCase();const m=v.match(/^(?:\d+\s*[-/]\s*)?(\d+)(R*)$/);return m?m[1].replace(/^0+(?=\d)/,'')+m[2]:''};
+const sheetIdFrom=s=>{const v=String(s||'').trim(),m=v.match(/\/spreadsheets\/d\/([\w-]+)/);return m?m[1]:/^[\w-]{20,}$/.test(v)?v:''};
+const quoteSheet=s=>"'"+s.replace(/'/g,"''")+"'";
+function status(id,msg,kind=''){const e=$(id);e.textContent=msg;e.className='status '+kind;}
+let token='',expires=0,tokenClient=null,clientIdLoaded='',sheetId='',serial=0,photoUrl='',photoRotation=0,ocrBusy=false;
+function validToken(){return !!token&&Date.now()<expires-60000}
+function validFields(){return !!(numeric($('pedido').value)&&numeric($('loja').value)&&normalizedOS($('os').value))}
+function refreshForm(){const valid=validFields();$('search').disabled=!valid||!validToken()||!sheetId;status('formStatus',valid?'Campos preenchidos. Confira os três números no romaneio.':'Informe OSC (pedido), loja e OS em formato válido.',valid?'ok':'warn')}
+function resetResult(){serial++;$('result').replaceChildren();$('result').classList.add('hidden');status('searchStatus','')}
+['pedido','loja','os','expectedStore'].forEach(id=>$(id).addEventListener('input',()=>{resetResult();refreshForm()}));
+$('photo').addEventListener('change',()=>{const f=$('photo').files[0];if(photoUrl)URL.revokeObjectURL(photoUrl);photoUrl=f?URL.createObjectURL(f):'';photoRotation=0;const img=$('photoPreview');img.src=photoUrl;img.classList.toggle('hidden',!f);$('rotate').disabled=!f;$('recognize').disabled=!f;status('ocrStatus',f?'Foto selecionada. Gire se necessário e toque em Reconhecer texto.':'Selecione uma foto.');resetResult()});
+$('rotate').addEventListener('click',()=>{photoRotation=(photoRotation+90)%360;$('photoPreview').style.transform='rotate('+photoRotation+'deg)';status('ocrStatus','Rotação: '+photoRotation+'°. Agora toque em Reconhecer texto.')});
+async function canvasFromPhoto(){const f=$('photo').files[0];if(!f)throw Error('Selecione uma imagem.');const img=await createImageBitmap(f);try{let w=img.width,h=img.height;const scale=Math.min(1,2000/Math.max(w,h));w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));const swap=photoRotation===90||photoRotation===270;const c=document.createElement('canvas');c.width=swap?h:w;c.height=swap?w:h;const ctx=c.getContext('2d');ctx.translate(c.width/2,c.height/2);ctx.rotate(photoRotation*Math.PI/180);ctx.drawImage(img,-w/2,-h/2,w,h);return c}finally{img.close()}}
+// Extrai SOMENTE padrões marcados OSC e uma OS no formato loja-OS.
+function extractCandidates(text){const clean=String(text||'').toUpperCase().replace(/[–—−]/g,'-').replace(/[|]/g,'I');const pedido=[];const os=[];
+ const rePedido=/\bO\s*S\s*C\s*[:;.]?\s*(\d[\d.\s]{4,12}\d)\b/g;let m;
+ while((m=rePedido.exec(clean))){const d=numeric(m[1]);if(d&&d.length>=5&&d.length<=12)pedido.push(d)}
+ const reOS=/\b(\d{2,5})\s*[-/]\s*(\d{2,9}R*)\b/g;
+ while((m=reOS.exec(clean))){const store=numeric(m[1]),order=normalizedOS(m[2]);if(store&&order)os.push({loja:store,os:order})}
+ const uniquePedidos=[...new Set(pedido)],uniqueOS=[...new Map(os.map(x=>[x.loja+'|'+x.os,x])).values()];
+ return {pedido:uniquePedidos,os:uniqueOS};}
+$('recognize').addEventListener('click',async()=>{if(ocrBusy)return;if(!window.Tesseract){status('ocrStatus','Tesseract indisponível. Verifique conexão de internet.','danger');return}ocrBusy=true;$('recognize').disabled=true;let worker;
+ try{status('ocrStatus','Preparando imagem e modelo OCR…');const c=await canvasFromPhoto();worker=await Tesseract.createWorker('eng',1,{logger:m=>{if(m.status==='recognizing text')status('ocrStatus','Lendo romaneio… '+Math.round((m.progress||0)*100)+'%')}});
+ const result=await worker.recognize(c);const txt=result.data.text||'';$('ocrText').value=txt;
+ const found=extractCandidates(txt);if(found.pedido.length===1)$('pedido').value=found.pedido[0];if(found.os.length===1){$('loja').value=found.os[0].loja;$('os').value=found.os[0].os}
+ const problems=[];if(found.pedido.length!==1)problems.push(found.pedido.length?'mais de um OSC possível':'OSC não reconhecido');if(found.os.length!==1)problems.push(found.os.length?'mais de uma OS possível':'loja-OS não reconhecida');
+ status('ocrStatus',problems.length?'OCR concluído, mas é preciso conferir/corrigir: '+problems.join('; ')+'.':'OCR encontrou OSC e loja-OS. Confira os números impressos antes de consultar.',problems.length?'warn':'ok');resetResult();refreshForm();
+ }catch(e){status('ocrStatus','Falha na leitura: '+(e?.message||String(e)),'danger')}
+ finally{if(worker)await worker.terminate().catch(()=>{});ocrBusy=false;$('recognize').disabled=!$('photo').files.length}
+});
+$('connect').addEventListener('click',()=>{const cid=$('clientId').value.trim(),sid=sheetIdFrom($('sheetId').value);
+ if(!/^[\w.-]+\.apps\.googleusercontent\.com$/.test(cid)){status('authStatus','ID OAuth inválido.','danger');return}if(!sid){status('authStatus','URL/ID da planilha inválido.','danger');return}if(!window.google?.accounts?.oauth2){status('authStatus','Login Google indisponível.','danger');return}
+ if(cid!==clientIdLoaded||!tokenClient){tokenClient=google.accounts.oauth2.initTokenClient({client_id:cid,scope:'https://www.googleapis.com/auth/spreadsheets.readonly',callback:r=>{if(r?.error||!r?.access_token){status('authStatus','Acesso não autorizado: '+(r?.error||'sem token'),'danger');return}token=r.access_token;expires=Date.now()+Number(r.expires_in||3600)*1000;sheetId=sheetIdFrom($('sheetId').value);$('disconnect').disabled=false;status('authStatus','Acesso de leitura autorizado.','ok');refreshForm()},error_callback:e=>status('authStatus','Erro ao abrir autorização: '+(e?.type||'popup bloqueado'),'danger')});clientIdLoaded=cid}
+ tokenClient.requestAccessToken({prompt:'consent'});
+});
+$('disconnect').addEventListener('click',()=>{if(token&&window.google?.accounts?.oauth2)google.accounts.oauth2.revoke(token,()=>{});token='';expires=0;sheetId='';$('disconnect').disabled=true;status('authStatus','Desconectado.');resetResult();refreshForm()});
+async function api(url){const response=await fetch(url,{headers:{Authorization:'Bearer '+token,Accept:'application/json'},cache:'no-store'});let obj={};try{obj=await response.json()}catch{}if(!response.ok){if(response.status===401){token='';expires=0;refreshForm()}throw Error('Google Sheets API '+response.status+': '+(obj?.error?.message||response.statusText))}return obj}
+function url(path,params={}){const u=new URL('https://sheets.googleapis.com/v4/spreadsheets/'+encodeURIComponent(sheetId)+path);for(const [k,v] of Object.entries(params))u.searchParams.set(k,v);return u.toString()}
+function batch(ranges){const u=new URL(url('/values:batchGet'));for(const r of ranges)u.searchParams.append('ranges',r);u.searchParams.set('valueRenderOption','FORMATTED_VALUE');return u.toString()}
+function fact(container,label,value){const el=document.createElement('div');el.className='fact';const s=document.createElement('small');s.textContent=label;const b=document.createElement('strong');b.textContent=String(value||'—');el.append(s,b);container.append(el)}
+function renderMatch(m,values){const root=$('result');root.replaceChildren();root.classList.remove('hidden');const title=document.createElement('p');title.className='result-title ok';title.textContent='✓ Pedido e OS encontrados na MESMA linha';root.append(title);const facts=document.createElement('div');facts.className='facts';fact(facts,'OSC / NUM. PED.',values[7]);fact(facts,'OS',values[3]);fact(facts,'Aba',m.sheet);fact(facts,'Linha',m.row);fact(facts,'Fornecedor',values[8]);fact(facts,'Recebido em',values[9]||'Ainda não recebido');root.append(facts);const note=document.createElement('p');note.className='foot';note.textContent='Somente leitura. Loja informada no romaneio: '+numeric($('loja').value)+'. Verifique que esta planilha pertence a essa filial. Nenhuma baixa foi efetuada.';root.append(note)}
+$('search').addEventListener('click',async()=>{const pedido=numeric($('pedido').value),loja=numeric($('loja').value),os=normalizedOS($('os').value),expected=numeric($('expectedStore').value);if(!pedido||!loja||!os){status('searchStatus','Preencha OSC, loja e OS.','danger');return}if(!expected||loja!==expected){status('searchStatus','Loja do romaneio não corresponde à loja configurada para esta planilha. Consulta bloqueada.','danger');return}if(!validToken()||!sheetId){status('searchStatus','Autorize o Google primeiro.','warn');return}
+ const run=++serial;$('search').disabled=true;$('result').replaceChildren();$('result').classList.add('hidden');try{status('searchStatus','Consultando número do pedido e OS nas abas mensais…');const meta=await api(url('',{fields:'sheets(properties(title))'}));const sheets=(meta.sheets||[]).map(x=>x.properties?.title).filter(n=>MONTH_RE.test(n));if(!sheets.length)throw Error('Nenhuma aba mensal encontrada.');const found=[];
+ // Busca nas colunas D e H, na mesma linha, sem obter nome de cliente.
+ for(let i=0;i<sheets.length;i+=20){const group=sheets.slice(i,i+20),ranges=group.map(n=>quoteSheet(n)+'!D2:H');const values=await api(batch(ranges));(values.valueRanges||[]).forEach((vr,j)=>{(vr.values||[]).forEach((v,k)=>{if(numeric(v[4])===pedido&&normalizedOS(v[0])===os)found.push({sheet:group[j],row:k+2})})})}
+ if(run!==serial)return;if(found.length!==1){status('searchStatus',found.length?'Encontradas '+found.length+' correspondências: bloqueado por ambiguidade.':'Nenhuma linha contém simultaneamente pedido '+pedido+' e OS '+os+'. Verifique a planilha e o romaneio.',found.length?'danger':'warn');return}
+ const match=found[0],p=quoteSheet(match.sheet);const ret=await api(batch([p+'!A1:N1',p+'!A'+match.row+':N'+match.row]));const header=ret.valueRanges?.[0]?.values?.[0]||[],values=ret.valueRanges?.[1]?.values?.[0]||[];
+ if(norm(header[3])!=='OS'||norm(header[7])!=='NUM. PED.'||norm(header[9])!=='DATA RECEB.')throw Error('Cabeçalho diferente do esperado.');if(numeric(values[7])!==pedido||normalizedOS(values[3])!==os)throw Error('A OS ou o pedido mudou durante a consulta.');if(run!==serial)return;renderMatch(match,values);status('searchStatus',values[9]?'Correspondência confirmada. ATENÇÃO: data de recebimento já preenchida.':'Correspondência confirmada. Ainda não há data de recebimento.','ok');
+ }catch(e){if(run===serial)status('searchStatus','Erro na consulta: '+(e?.message||String(e)),'danger')}finally{if(run===serial)refreshForm()}
+});
+refreshForm();
+</script>
+</body></html>
