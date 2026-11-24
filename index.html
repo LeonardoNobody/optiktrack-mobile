@@ -117,7 +117,7 @@ async function drainQueue(){if(lookupBusy||!tokenValid()||!pendingCodes.length)r
    updateQueue();
   }
  }catch(e){$('lookupInfo').textContent='Falha ao preparar consulta: '+String(e.message||e);for(const code of pendingCodes){queued.set(code,{status:'Consulta indisponível',kind:'bad',msg:'Reautorize e tente atualizar.'})}pendingCodes.length=0;updateQueue()}
- finally{lookupBusy=false;if(pendingCodes.length&&tokenValid()&&serial===lookupSerial)drainQueue()}
+ finally{lookupBusy=false;updateQueue();if(pendingCodes.length&&tokenValid()&&serial===lookupSerial)drainQueue()}
 }
 $('authorize').addEventListener('click',()=>{
  const cid=$('clientId').value.trim(),sid=sheetIdFrom($('sheetId').value);
