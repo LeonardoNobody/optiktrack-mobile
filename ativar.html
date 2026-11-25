@@ -1,0 +1,21 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#081a2d"><title>OptikTrack · Ativação administrativa</title><style>
+*{box-sizing:border-box}body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;background:#07192c;color:#edf7ff;margin:0;padding:22px}.box{max-width:480px;margin:7vh auto;background:#12314e;border:1px solid #2b536e;border-radius:18px;padding:22px}label{display:block;font-size:13px;margin:14px 0 6px;color:#cbe0ee}input,button{width:100%;padding:13px;border-radius:9px;font-size:16px}input{background:#061b30;color:white;border:1px solid #487493}button{margin-top:16px;background:#35c0cf;border:0;color:#092137;font-weight:700}button:disabled{opacity:.5}p{font-size:14px;line-height:1.55}a{color:#7ce8f3}
+</style></head><body><main class="box"><h1>Ativação da estação</h1><p>Área usada apenas pelo administrador, uma vez por aparelho. O código temporário é criado no Apps Script da cópia de teste e tem validade de 15 minutos.</p>
+<label for="code">Código temporário</label><input type="password" id="code" autocomplete="off" placeholder="Cole o código do Apps Script">
+<label for="station">Nome deste aparelho</label><input id="station" maxlength="50" value="Recebimento 1988" autocomplete="off">
+<button id="activate" disabled>Conectando ao servidor…</button><p id="msg">Preparando ativação…</p><p><a href="./">Voltar ao recebimento</a></p></main>
+<script src="bridge-config.js"></script><script>
+ 'use strict';const $=id=>document.getElementById(id);let ready=false,sequence=0,bridgeNonce='',port=null;const pending=new Map();
+function trusted(origin){try{const u=new URL(origin);return u.protocol==='https:'&&(u.hostname==='script.google.com'||u.hostname==='script.googleusercontent.com'||u.hostname.endsWith('.googleusercontent.com'))}catch(e){return false}}
+window.addEventListener('message',ev=>{
+ if(ev.data?.type!=='ot_ready'||ev.data?.nonce!==bridgeNonce||!trusted(ev.origin)||!ev.ports?.[0]||ready)return;
+ port=ev.ports[0];port.onmessage=e=>{const msg=e.data;if(msg?.type!=='ot_result')return;const p=pending.get(msg.id);if(!p)return;pending.delete(msg.id);clearTimeout(p.timer);msg.ok?p.resolve(msg.data):p.reject(new Error(msg.error||'Falha do servidor'))};port.start();
+ ready=true;$('activate').disabled=false;$('activate').textContent='Ativar este aparelho';$('msg').textContent='Servidor conectado. Digite o código temporário.';
+});
+function rpc(method,args){return new Promise((resolve,reject)=>{if(!ready)return reject(new Error('Servidor não conectado.'));const id='activate_'+(++sequence)+'_'+Date.now();const timer=setTimeout(()=>{pending.delete(id);reject(new Error('O servidor não respondeu.'))},45000);pending.set(id,{resolve,reject,timer});port.postMessage({type:'ot_req',id,method,args})})}
+$('activate').addEventListener('click',async()=>{const code=$('code').value.trim(),label=$('station').value.trim();if(!code){$('msg').textContent='Informe o código temporário.';return} $('activate').disabled=true;$('msg').textContent='Ativando este dispositivo…';try{const result=await rpc('otAtivarEstacao',[code,label]);localStorage.setItem('ot_station_v09',result.token);$('code').value='';$('msg').textContent='Estação ativada neste navegador. Abra o recebimento.';$('activate').textContent='Ativado';}catch(e){$('msg').textContent='Falha na ativação: '+e.message;$('activate').disabled=false}});
+const url=window.OT_BRIDGE_URL||'';if(/^https:\/\/script\.google\.com\/macros\/s\/[-_A-Za-z0-9]+\/exec(?:\?.*)?$/.test(url)){
+ const frame=document.createElement('iframe');frame.id='bridge';frame.style.display='none';frame.title='Conexão com servidor';bridgeNonce=Array.from(crypto.getRandomValues(new Uint8Array(24)),x=>x.toString(16).padStart(2,'0')).join('');frame.src=url+(url.includes('?')?'&':'?')+'nonce='+bridgeNonce;document.body.append(frame);
+ setTimeout(()=>{if(!ready)$('msg').textContent='Servidor não acessível. Confira a URL e a publicação do Apps Script.'},15000)
+}else $('msg').textContent='Backend ainda não configurado pelo administrador.';
+</script></body></html>
